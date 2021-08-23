@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 // import logo from './logo.svg';
 import './App.css';
 import Card from './components/Card';
+import Chart from './components/Chart';
 import Footer from './components/Footer';
 
 
@@ -15,7 +16,7 @@ function App() {
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(() => {
-    fetch("https://api1.binance.com/api/v3/klines?symbol=BTCUSDT&interval=15m")
+    fetch("https://api1.binance.com/api/v3/klines?symbol=BTCUSDT&interval=30m")
       .then(res => res.json())
       .then(
         (result) => {
@@ -31,7 +32,7 @@ function App() {
         }
       )
   }, [])
-  const smaVal = 9;
+  const smaVal = 3;
   useEffect(() => {
     let closeList = []
     items.forEach((item) => {
@@ -54,11 +55,12 @@ function App() {
   }, [items])
   return (
     <div className="App">
-      {items.map((item, index) => {
+      {/* {items.map((item, index) => {
         return (
           <Card item={item} key={index} average={sma[index]} />
         )
-      })}
+      })} */}
+      <Chart items={items} average={sma} ></Chart>
       <Footer items={items} average={sma} smaVal={smaVal}></Footer>
     </div>
   );

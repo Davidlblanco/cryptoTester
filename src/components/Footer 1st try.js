@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-//3sma
+//9sma
 export default function Footer({ items, average, smaVal }) {
-    const [trades, setTrades] = useState(0)
+    const [result, setResult] = useState(0)
     const [gainPoints, setGainPoints] = useState(0)
     const [lossPoints, setLossPoints] = useState(0)
 
@@ -14,50 +14,48 @@ export default function Footer({ items, average, smaVal }) {
             if (index <= smaVal - 1) return;
             const open = parseFloat(item[1]);
             const close = parseFloat(item[4]);
-            if (average[index - 1] > open) {
+            if (average[index - 1] < items[index - 1][4]) {
                 //buy
                 if (open < close) {
-                    counter = counter + 1
-                    gainPoints = gainPoints + (close - open)
-                    // console.log('buy gain')
+                    counter = counter + 1 * leverage
+                    gainPoints = gainPoints + (close - open) * leverage
+                    console.log('buy gain')
                     leverage++
                 }
                 else {
-                    // console.log('buy loss')
-                    counter = counter + 1
-                    lossPoints = lossPoints + (open - close)
+                    console.log('buy loss')
+                    counter = counter - 1 * leverage
+                    lossPoints = lossPoints + (open - close) * leverage
                     leverage = 1
                 }
             }
-            else if (average[index - 1] < open) {
+            else if (average[index - 1] > items[index - 1][4]) {
                 //sell
                 if (open > close) {
-                    // console.log('sell gain')
-                    counter = counter + 1
-                    gainPoints = gainPoints + (open - close)
+                    console.log('sell gain')
+                    counter = counter + 1 * leverage
+                    gainPoints = gainPoints + (open - close) * leverage
                     leverage++
                 }
                 else {
-                    // console.log('sell loss')
-                    counter = counter + 1
-                    lossPoints = lossPoints + (close - open)
+                    console.log('sell loss')
+                    counter = counter - 1 * leverage
+                    lossPoints = lossPoints + (close - open) * leverage
                     leverage = 1
                 }
             }
         });
-        setTrades(counter)
+        console.log(counter)
+        setResult(counter)
         setGainPoints(gainPoints)
         setLossPoints(lossPoints)
     }, [items, average])
-    // console.log(result)
+    console.log(result)
     return (
         <div>
-            <p>Trades: {trades}</p>
-            <p>Result: {gainPoints - lossPoints}</p>
-            <p>Gain: {gainPoints}</p>
-            <p>Loss: {lossPoints}</p>
-
-
+            Result: {result}
+            Gain: {gainPoints}
+            Loss: {lossPoints}
         </div>
     )
 }
